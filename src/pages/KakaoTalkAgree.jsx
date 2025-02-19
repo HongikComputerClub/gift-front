@@ -1,6 +1,6 @@
 import Header from "../components/common/Header";
 import Agree from "../components/kakao/Agree";
-import Ment from "../components/kakao/ment.jsx";
+import Ment from "../components/kakao/Ment";
 import SpeechBubble from "../components/kakao/SpeechBubble";
 
 const KakaoTalkAgree = () => {
