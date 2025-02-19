@@ -1,5 +1,5 @@
 import Header from "../components/common/Header";
-import Ment from "../components/kakao/ment";
+import Ment from "../components/kakao/Ment";
 import SpeechBubble from "../components/kakao/SpeechBubble";
 import WriteName from "../components/kakao/WriteName";
 
