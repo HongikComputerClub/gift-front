@@ -26,12 +26,12 @@
   display: flex;
   position: fixed;
   top: 55px;
-  width: 300px;
+  width: 360px;
   height: 115px;
   text-align: center;
   align-items: center;
-  left: 30px;
   font-size: 14.5px;
+  padding: 0 30px;
 }
 
 @media (max-height: 622px) {
