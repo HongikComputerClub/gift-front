@@ -44,10 +44,6 @@ const Agree = () => {
       </div>
       {click && (
         <AgreePopup
-          onClose={() => {
-            setChecked(false);
-            setClick(false);
-          }}
           onCheck={() => {
             setChecked(true);
             setClick(false);

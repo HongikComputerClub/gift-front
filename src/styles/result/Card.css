@@ -12,6 +12,7 @@
 .Card img {
   width: 159.95px;
   height: 161.51px;
+  border: 1px solid #c4c4c4;
 }
 
 .Card .text {
