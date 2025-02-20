@@ -5,8 +5,8 @@ const AgreePopup = ({ onCheck }) => {
   return (
     <div className="grayBox">
       <div className="AgreePopup">
+        <h6>X</h6>
         <div className="text">
-          <h6>X</h6>
           <p>
             프레젠톡에서는 사용자가 제공하는 카카오톡 대화 내용을 분석하여,
             맞춤형 선물을 추천하는 서비스를 제공합니다. 서비스 제공을 위해
