@@ -72,6 +72,24 @@
   margin: 0;
 }
 
+.MoveShopping .coupang {
+  /* ※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다. */
+
+  position: absolute;
+  width: 255px;
+  height: 11px;
+  left: calc(50% - 255px / 2);
+  top: 239px;
+  text-align: center;
+
+  font-family: "Pretendard";
+  font-style: normal;
+  font-size: 9px;
+  line-height: 11px;
+
+  color: #aaaaaa;
+}
+
 @media (max-height: 620px) {
   .MoveShopping {
     top: 160px;

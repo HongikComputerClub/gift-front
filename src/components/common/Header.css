@@ -2,7 +2,7 @@
   position: fixed;
   top: 0px;
   text-align: center;
-  padding-top: 37px;
+  padding-top: 27px;
   width: 360px;
   height: 88px;
   z-index: 1001; /*겹치는 문제 해결 */
@@ -10,5 +10,5 @@
 
 .Header img {
   width: 78px;
-  height: 17.79px;
+  height: 27.79px;
 }
