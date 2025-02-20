@@ -6,8 +6,8 @@ import Card from "./Card";
 import Loading from "./Loading";
 import "../../styles/result/Inventory.css";
 import axios from "axios";
-import { IoIosArrowDropupCircle } from "react-icons/io"; // up 아이콘
-import { IoReloadCircleSharp } from "react-icons/io5"; // reload 아이콘
+import { FaChevronUp } from "react-icons/fa"; //up 아이콘
+import { TbReload } from "react-icons/tb"; //reload 아이콘
 
 const Inventory = () => {
   const { userData } = useUser();
@@ -243,13 +243,13 @@ const Inventory = () => {
           ))}
 
           {isScrolled ? (
-            <IoIosArrowDropupCircle
-              className="up"
+            <FaChevronUp
+              className="icon up"
               onClick={() => (inventoryItemRef.current.scrollTop = 0)}
             />
           ) : (
             !lastItems[selectedCategory] && (
-              <IoReloadCircleSharp className="reload" onClick={loadNextItems} />
+              <TbReload className="icon reload" onClick={loadNextItems} />
             )
           )}
         </div>
