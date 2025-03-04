@@ -41,7 +41,7 @@
   position: fixed;
   width: 50px;
   height: 50px;
-  right: 20px;
+  right: calc((100% - 360px) / 2 + 20px); /* 화면 중앙에서 App 기준으로 이동 */
   bottom: 40px;
   z-index: 1001;
   background-color: #000000;
