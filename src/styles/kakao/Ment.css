@@ -20,23 +20,33 @@
 }
 
 .Ment_result {
-  overflow: hidden;
-}
-.Ment_result h3 {
   display: flex;
-  position: fixed;
-  top: 55px;
+  flex-direction: column;
+  position: absolute;
   width: 360px;
   height: 115px;
-  text-align: center;
+  top: 60px;
+
+  /* 내부 요소 수직 중앙 정렬 */
+  justify-content: center;
   align-items: center;
+  text-align: center;
+}
+
+.Ment_result h3 {
+  top: 0;
+  height: auto;
   font-size: 14.5px;
   padding: 0 30px;
+  width: 100%;
 }
 
 @media (max-height: 622px) {
-  .Ment h3 {
-    font-size: 10px;
-    top: 70px;
+  .Ment_result {
+    top: 40px;
+  }
+
+  .Ment_result h3 {
+    font-size: 11px;
   }
 }
