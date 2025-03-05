@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import Ment2 from "./Ment2";
 import useUser from "../../hooks/UseUser";
 import Category from "./Category";
@@ -12,7 +12,6 @@ import { TbReload } from "react-icons/tb"; //reload 아이콘
 const Inventory = () => {
   const { userData } = useUser();
   const [inventory, setInventory] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [loading, setLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,20 +20,6 @@ const Inventory = () => {
   const [lastItems, setLastItems] = useState({});
   const [page, setPage] = useState({});
   const [reasons, setReasons] = useState([]);
-  const [testReason, setTestReason] = useState([
-    {
-      keyword: "핸드크림",
-      reason: "대화 내용에 따라 향수 선물이 적절할 것이라는 근거...",
-    },
-    {
-      keyword: "립밤",
-      reason: "대중교통 이용 언급 등으로 무선 이어폰이 필요할 것이라는 근거...",
-    },
-    {
-      keyword: "머플러",
-      reason: "감성적 표현에 기반하여 목걸이가 적합하다는 근거...",
-    },
-  ]);
 
   // userData 변하면 API 호출, 똑같으면 sessionStorage
   const getInventory = useCallback(async () => {
@@ -47,15 +32,7 @@ const Inventory = () => {
       if (savedInventory) {
         const parsedInventory = JSON.parse(savedInventory);
         setInventory(parsedInventory);
-        const parsedReason = savedReason ? JSON.parse(savedReason) : [];
-        setReasons(parsedReason);
-        const uniqueCategories = [
-          ...new Set(parsedInventory.map((item) => item.keyword)),
-        ];
-        setCategories(uniqueCategories);
-        if (uniqueCategories.length > 0) {
-          setSelectedCategory(uniqueCategories[0]);
-        }
+        setReasons(savedReason ? JSON.parse(savedReason) : []);
         setLoading(false);
       }
     } else {
@@ -68,15 +45,7 @@ const Inventory = () => {
         if (savedInventory) {
           const parsedInventory = JSON.parse(savedInventory);
           setInventory(parsedInventory);
-          const parsedReason = JSON.parse(savedReason);
-          setReasons(parsedReason);
-          const uniqueCategories = [
-            ...new Set(parsedInventory.map((item) => item.keyword)),
-          ];
-          setCategories(uniqueCategories);
-          if (uniqueCategories.length > 0) {
-            setSelectedCategory(uniqueCategories[0]);
-          }
+          setReasons(savedReason ? JSON.parse(savedReason) : []);
           setLoading(false);
         }
       } else {
@@ -107,14 +76,6 @@ const Inventory = () => {
           sessionStorage.setItem("userData", JSON.stringify(userData));
           sessionStorage.setItem("inventory", JSON.stringify(inventoryData));
           sessionStorage.setItem("reason", JSON.stringify(reasonData));
-
-          const uniqueCategories = [
-            ...new Set(response.data.product.map((item) => item.keyword)),
-          ];
-          setCategories(uniqueCategories);
-          if (uniqueCategories.length > 0) {
-            setSelectedCategory(uniqueCategories[0]);
-          }
           setLoading(false);
         } catch (error) {
           console.log("선물 리스트 받아오기 실패", error);
@@ -127,8 +88,20 @@ const Inventory = () => {
     getInventory();
   }, [getInventory]);
 
+  const categories = useMemo(() => {
+    return [...new Set(inventory.map((item) => item.keyword))];
+  }, [inventory]);
+
+  useEffect(() => {
+    if (categories.length > 0 && !selectedCategory) {
+      setSelectedCategory(categories[0]);
+    }
+  }, [categories, selectedCategory]);
+
   // 처음에만
   const loadFirstItems = useCallback(() => {
+    if (!selectedCategory) return;
+
     const filteredInventory = inventory.filter(
       (item) => item.keyword === selectedCategory
     );
@@ -150,6 +123,7 @@ const Inventory = () => {
 
   // 재분석 시 아이템 로드
   const loadNextItems = useCallback(() => {
+    if (!selectedCategory) return;
     const filteredInventory = inventory.filter(
       (item) => item.keyword === selectedCategory
     );
@@ -211,11 +185,6 @@ const Inventory = () => {
   if (loading) {
     return <Loading />;
   }
-
-  // {
-  //   console.log(reasons);
-  //   console.log(inventory);
-  // }
 
   return (
     <>
