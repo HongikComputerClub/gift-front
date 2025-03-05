@@ -6,40 +6,10 @@ import axios from "axios";
 
 const Card = ({ inventory }) => {
   const [click, setClick] = useState(false);
-  const [changedImage, setChangedImage] = useState("");
 
   const onCloseEvent = () => {
     setClick(false);
   };
-
-  useEffect(() => {
-    const changeImage = async ({ url }) => {
-      if (!url.startsWith("https://kream")) {
-        // URL이 "https://kream"으로 시작하지 않으면 빠져나옴
-        setChangedImage(url); // 그대로 원본 이미지를 사용
-        return;
-      }
-
-      try {
-        const response = await axios.get(
-          `https://app.presentalk.store/api/proxy/kream?url=${encodeURIComponent(
-            url
-          )}`,
-          {
-            responseType: "blob",
-          }
-        );
-        const imageBlob = response.data;
-        const imageUrl = URL.createObjectURL(imageBlob);
-        setChangedImage(imageUrl);
-      } catch (error) {
-        console.log("이미지 변환 실패", error);
-      }
-    };
-    if (inventory.image) {
-      changeImage({ url: inventory.image });
-    }
-  }, [inventory]);
 
   return (
     <div>
@@ -50,7 +20,7 @@ const Card = ({ inventory }) => {
         }}
       >
         <img
-          src={changedImage}
+          src={inventory.changedImage || inventory.image}
           alt="제품 사진"
           onError={(e) => {
             e.target.onerror = null;
@@ -64,7 +34,7 @@ const Card = ({ inventory }) => {
       </div>
       {click && (
         <MoveShopping
-          img={changedImage}
+          img={inventory.changedImage || inventory.image}
           title={inventory.title}
           link={inventory.link}
           onClose={onCloseEvent}

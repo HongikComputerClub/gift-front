@@ -21,6 +21,25 @@ const Inventory = () => {
   const [page, setPage] = useState({});
   const [reasons, setReasons] = useState([]);
 
+  const changeImage = async (url) => {
+    if (!url.startsWith("https://kream")) {
+      return url; // 변환 필요 없음
+    }
+
+    try {
+      const response = await axios.get(
+        `https://app.presentalk.store/api/proxy/kream?url=${encodeURIComponent(
+          url
+        )}`,
+        { responseType: "blob" }
+      );
+      return URL.createObjectURL(response.data);
+    } catch (error) {
+      console.log("이미지 변환 실패", error);
+      return url; // 변환 실패 시 원본 URL 유지
+    }
+  };
+
   // userData 변하면 API 호출, 똑같으면 sessionStorage
   const getInventory = useCallback(async () => {
     const savedUserData = sessionStorage.getItem("userData");
@@ -68,24 +87,36 @@ const Inventory = () => {
           );
           const inventoryData = response.data.product || [];
           const reasonData = response.data.reason || [];
-          setInventory(inventoryData);
+
+          const updatedInventory = await Promise.all(
+            inventoryData.map(async (item) => {
+              const changedImage = await changeImage(item.image);
+              return { ...item, changedImage };
+            })
+          );
+
+          setInventory(updatedInventory);
           setReasons(reasonData);
 
           // sessionStorage에 저장
-
           sessionStorage.setItem("userData", JSON.stringify(userData));
-          sessionStorage.setItem("inventory", JSON.stringify(inventoryData));
+          sessionStorage.setItem("inventory", JSON.stringify(updatedInventory));
           sessionStorage.setItem("reason", JSON.stringify(reasonData));
-          setLoading(false);
         } catch (error) {
           console.log("선물 리스트 받아오기 실패", error);
+        } finally {
+          setLoading(false);
         }
       }
     }
   }, [userData]);
 
   useEffect(() => {
-    getInventory();
+    const fetchInventory = async () => {
+      await getInventory();
+    };
+
+    fetchInventory();
   }, [getInventory]);
 
   const categories = useMemo(() => {
