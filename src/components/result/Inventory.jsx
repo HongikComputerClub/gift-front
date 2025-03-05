@@ -98,7 +98,6 @@ const Inventory = () => {
     }
 
     try {
-      console.log("요청 URL", url);
       const response = await axios.get(
         `https://app.presentalk.store/api/proxy/kream?url=${encodeURIComponent(
           url
@@ -106,7 +105,6 @@ const Inventory = () => {
         { responseType: "blob" }
       );
       const objectUrl = URL.createObjectURL(response.data);
-      console.log("이미지 변환은 성공");
       return objectUrl;
     } catch (error) {
       console.log("이미지 변환 실패", error);

@@ -6,9 +6,6 @@ const MoveShopping = ({ img, title, link, onClose }) => {
     window.open(link, "_blank");
   };
 
-  console.log("링크는", link);
-  console.log(link.startsWith("https://www.coupang.com"));
-
   return (
     <div className="grayBox">
       <div className="MoveShopping">
@@ -18,7 +15,8 @@ const MoveShopping = ({ img, title, link, onClose }) => {
           <p dangerouslySetInnerHTML={{ __html: title }}></p>
         </div>
         {/* 쿠팡 링크일 경우에만 해당 메시지 렌더링 */}
-        {link.startsWith("https://www.coupang.com") && (
+        {(link.startsWith("https://link.coupang.com") ||
+          link.startsWith("https://www.coupang.com")) && (
           <h5 className="coupang">
             ※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.
           </h5>
