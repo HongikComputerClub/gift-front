@@ -21,25 +21,6 @@ const Inventory = () => {
   const [page, setPage] = useState({});
   const [reasons, setReasons] = useState([]);
 
-  const changeImage = async (url) => {
-    if (!url.startsWith("https://kream")) {
-      return url; // 변환 필요 없음
-    }
-
-    try {
-      const response = await axios.get(
-        `https://app.presentalk.store/api/proxy/kream?url=${encodeURIComponent(
-          url
-        )}`,
-        { responseType: "blob" }
-      );
-      return URL.createObjectURL(response.data);
-    } catch (error) {
-      console.log("이미지 변환 실패", error);
-      return url; // 변환 실패 시 원본 URL 유지
-    }
-  };
-
   // userData 변하면 API 호출, 똑같으면 sessionStorage
   const getInventory = useCallback(async () => {
     const savedUserData = sessionStorage.getItem("userData");
@@ -111,12 +92,30 @@ const Inventory = () => {
     }
   }, [userData]);
 
-  useEffect(() => {
-    const fetchInventory = async () => {
-      await getInventory();
-    };
+  const changeImage = async (url) => {
+    if (!url.startsWith("https://kream")) {
+      return url; // 변환 필요 없음
+    }
 
-    fetchInventory();
+    try {
+      console.log("요청 URL", url);
+      const response = await axios.get(
+        `https://app.presentalk.store/api/proxy/kream?url=${encodeURIComponent(
+          url
+        )}`,
+        { responseType: "blob" }
+      );
+      const objectUrl = URL.createObjectURL(response.data);
+      console.log("이미지 변환은 성공");
+      return objectUrl;
+    } catch (error) {
+      console.log("이미지 변환 실패", error);
+      return url; // 변환 실패 시 원본 URL 유지
+    }
+  };
+
+  useEffect(() => {
+    getInventory();
   }, [getInventory]);
 
   const categories = useMemo(() => {
@@ -222,7 +221,12 @@ const Inventory = () => {
       {reasons.some((item) => item.keyword === selectedCategory) ? (
         reasons
           .filter((item) => item.keyword === selectedCategory)
-          .map((item, index) => <Ment2 content={item.reason} key={index} />)
+          .map((item, index) => (
+            <Ment2
+              content={item.reason.replace(/\[|\]/g, "")} // [] 제거
+              key={index}
+            />
+          ))
       ) : (
         <Ment2 content="소중한 상대방을 위해 이런 선물은 어떠세요?" />
       )}

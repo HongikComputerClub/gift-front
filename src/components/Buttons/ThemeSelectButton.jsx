@@ -36,7 +36,7 @@ const ThemeSelectButton = () => {
             >
               {item === "발렌타인데이" ? (
                 <>
-                  발렌타인
+                  화이트
                   <br />
                   데이
                 </>
@@ -46,6 +46,7 @@ const ThemeSelectButton = () => {
             </button>
           ))}
         </div>
+
         <div className="gift-theme-row">
           {themes.slice(3, 6).map((item) => (
             <button
@@ -59,7 +60,7 @@ const ThemeSelectButton = () => {
             >
               {item === "발렌타인데이" ? (
                 <>
-                  발렌타인
+                  화이트
                   <br />
                   데이
                 </>
